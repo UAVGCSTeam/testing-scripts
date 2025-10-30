@@ -1,8 +1,16 @@
 import serial
 import time
+import glob
 
 # Configure your serial connection
-port = '/dev/cu.usbserial-A10KFA7J'
+# Auto-detect USB serial port
+usb_ports = glob.glob('/dev/cu.usb*')
+if not usb_ports:
+    raise Exception("No USB serial ports found matching /dev/cu.usb*")
+port = usb_ports[0]  # Use the first match
+if len(usb_ports) > 1:
+    print(f"Multiple USB ports found: {usb_ports}. Using {port}")
+
 baud = 57600
 s = serial.Serial(port, baud, timeout=1)
 
@@ -48,9 +56,15 @@ for cmd, label in commands.items():
     time.sleep(0.2)
     response = s.read(20).decode(errors='ignore').strip()
     if label == 'Baud Rate': 
-        print(f"{label}: {baud_rates[int(response)]}")
+        if response: # Ensure response is not an empty string
+            print(f"{label}: {baud_rates[int(response)]}")
+        else:
+            print(f"{label}: Invalid/No Response")
     elif label == 'API Mode': 
-        print(f"{label}: {api_modes[int(response)]}")
+        if response: # Ensure response is not an empty string
+            print(f"{label}: {api_modes[int(response)]}")
+        else:
+            print(f"{label}: Invalid/No Response")
     else:
         print(f"{label}: {response}")
 
