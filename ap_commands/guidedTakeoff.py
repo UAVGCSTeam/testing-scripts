@@ -20,7 +20,7 @@ try:
         print(f"[{time.strftime("%I:%M:%S %p")}] ✔︎ Connected on {SERIAL_PORT} @ baud {BAUD}")
     else: 
         print("Using UDP connection")
-        mavObj = mavutil.mavlink_connection(f'udp:{MAC_IP}:{UDP_PORT}', source_system=0)  # or serial:'/dev/ttyACM0', baud=115200
+        mavObj = mavutil.mavlink_connection(f'udp:{MAC_IP}:{UDP_PORT}', source_system=0)
         print(f"[{time.strftime("%I:%M:%S %p")}] ✔︎ Connected on {MAC_IP}:{UDP_PORT}")
 
 
